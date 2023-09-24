@@ -30,6 +30,7 @@ public class Interact implements Listener{
             		if(sign.getLine(1).equals("Altar of")){
             			if(p.hasPermission("newgods.pray")==false){
             				p.sendMessage(ChatColor.DARK_RED+"Sorry but you're not permitted to do this.");
+                			e.setCancelled(true);
             				return;
             			}
             			String godName=sign.getLine(2);
@@ -41,10 +42,12 @@ public class Interact implements Listener{
             					int time=(int) (epoch / 1000);
             					if((plrs.get(name)>time-timeBetweenPrays && p.hasPermission("newgods.halfpraytime")==false)){
             						p.sendMessage(ChatColor.DARK_RED+"Wait another "+(timeBetweenPrays-(time-plrs.get(name)))+" seconds.");
+            	        			e.setCancelled(true);
             						return;
             					}
             					if((p.hasPermission("newgods.halfpraytime") && plrs.get(name)>time-timeBetweenPrays/2)){
             						p.sendMessage(ChatColor.DARK_RED+"Wait another "+(timeBetweenPrays/2-(time-plrs.get(name)))+" seconds.");
+            	        			e.setCancelled(true);
             						return;
             					}
             				}
@@ -66,13 +69,16 @@ public class Interact implements Listener{
             					long epoch = System.currentTimeMillis();
             					int time=(int) (epoch / 1000);
             					plrs.put(name, time);
+                    			e.setCancelled(true);
             					return;            					
             				}else{
             					if(playerGod.equals("null")){
             						God.FollowGod(p,godName);
+            	        			e.setCancelled(true);
             						return;
             					}
             					p.sendMessage(ChatColor.DARK_RED+"This isn't an altar for your god. Type /gleave to leave your god.");
+                    			e.setCancelled(true);
             					return;
             				}            				
             			}

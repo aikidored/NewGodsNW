@@ -96,12 +96,12 @@ public class God implements CommandExecutor {
 			plr.sendMessage(ChatColor.DARK_RED+"Sorry but that name cant be used.");
 			return;
 		}
-		for(String bannedName : NewGods.bannedGodNames){
+		/*for(String bannedName : NewGods.bannedGodNames){
 			if(godName.toUpperCase().equals(bannedName.toUpperCase())){
 				plr.sendMessage(ChatColor.DARK_RED+"Sorry but that name cant be used.");
 				return;
 			}
-		}
+		}*/
 		
 		int x =event.getBlock().getX();
 		int y =event.getBlock().getY();
@@ -163,82 +163,75 @@ public class God implements CommandExecutor {
 			p.sendMessage(ChatColor.DARK_RED+"Sorry but you need to be your gods assigned leader to do this.");
 		}
 	}
-	
-	public static void SacrificeItem(Player p){
-		int playerID = NewGods.data.getPlayerID(p.getName());
-		int godID = NewGods.data.getGodID(NewGods.data.playerGod.get(playerID));
-		if(godID==-1){return;}
-		if (p.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.getMaterial(NewGods.godItems.get(godID)),
-				NewGods.itemAmountLeft.get(godID)))) {						
-			p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() - 1);
-			
-			if(p.hasPermission("newgods.doublexp")){
-			p.sendMessage(ChatColor.valueOf(NewGods.data.godType.get(godID)) + "Sacrificed item and gained "
-					+ NewGods.itemPrayerPoints.get(godID)*2 + " faith power.");
-			NewGods.data.playerHolyness.set(playerID,
-					NewGods.data.playerHolyness.get(playerID) + NewGods.itemPrayerPoints.get(godID)*2);
-			NewGods.data.playerGodHappines.set(playerID,
-					NewGods.data.playerGodHappines.get(playerID) + NewGods.itemPrayerPoints.get(godID)*2);
-		}
-			else{
-				p.sendMessage(ChatColor.valueOf(NewGods.data.godType.get(godID)) + "Sacrificed item and gained "
-						+ NewGods.itemPrayerPoints.get(godID) + " faith power.");
-				NewGods.data.playerHolyness.set(playerID,
-						NewGods.data.playerHolyness.get(playerID) + NewGods.itemPrayerPoints.get(godID));
-				NewGods.data.playerGodHappines.set(playerID,
-						NewGods.data.playerGodHappines.get(playerID) + NewGods.itemPrayerPoints.get(godID));
-			}
-			NewGods.data.godPower.set(godID, NewGods.data.godPower.get(godID)+NewGods.itemPrayerPoints.get(godID));
-			NewGods.itemAmountLeft.set(godID, NewGods.itemAmountLeft.get(godID) - 1);
-			if (NewGods.itemAmountLeft.get(godID) <= 0) {
-				p.closeInventory();
-			} else {
-				ItemStack itms = new ItemStack(Material.getMaterial(NewGods.godItems.get(godID)),
-						NewGods.itemAmountLeft.get(godID));
-				InitInterface.menuSacrifice.setOption(3, itms, NewGods.godItems.get(godID),
-						"Sacrifice for " + NewGods.itemPrayerPoints.get(godID) + " faith power.");
-				InitInterface.menuSacrifice.open(p);
-			}
-		} else {
-			p.closeInventory();
-			p.sendMessage(
-					ChatColor.DARK_RED + "You need to be holding the item you want to sacrifice.");
-		}
-	}
 
-	public static void SacrificeMob(Player p, EntityType e) {
-		int playerID = NewGods.data.getPlayerID(p.getName());
-		int godID = NewGods.data.getGodID(NewGods.data.playerGod.get(playerID));
-		if(godID==-1){return;}
-		String mob=NewGods.godMobs.get(godID);
-		mob=mob.trim();
-		String killedMob=e.toString();
-		killedMob=killedMob.trim();
-    	if(killedMob.equalsIgnoreCase(mob)){	
-    		if(NewGods.mobAmountLeft.get(godID)>0){
-    			//
-    			if(p.hasPermission("newgods.doublexp")){
-    				p.sendMessage(ChatColor.valueOf(NewGods.data.godType.get(godID)) + "Sacrificed mob and gained "
-        					+ NewGods.mobPrayerPoints.get(godID)*2 + " faith power.");
-        			NewGods.data.playerHolyness.set(playerID,
-        					NewGods.data.playerHolyness.get(playerID) + NewGods.mobPrayerPoints.get(godID)*2);
-        			NewGods.data.playerGodHappines.set(playerID,
-        					NewGods.data.playerGodHappines.get(playerID) + NewGods.mobPrayerPoints.get(godID)*2);
-        			NewGods.data.godPower.set(godID, NewGods.data.godPower.get(godID)+NewGods.mobPrayerPoints.get(godID)*2);
-    			}
-    			else{
-    				p.sendMessage(ChatColor.valueOf(NewGods.data.godType.get(godID)) + "Sacrificed mob and gained "
-        					+ NewGods.mobPrayerPoints.get(godID) + " faith power.");
-        			NewGods.data.playerHolyness.set(playerID,
-        					NewGods.data.playerHolyness.get(playerID) + NewGods.mobPrayerPoints.get(godID));
-        			NewGods.data.playerGodHappines.set(playerID,
-        					NewGods.data.playerGodHappines.get(playerID) + NewGods.mobPrayerPoints.get(godID));
-        			NewGods.data.godPower.set(godID, NewGods.data.godPower.get(godID)+NewGods.mobPrayerPoints.get(godID));
-    			}
-    			
-    			NewGods.mobAmountLeft.set(godID, NewGods.mobAmountLeft.get(godID) - 1);
-    			//
-    		}
+	  public static void SacrificeItem(Player p) {
+	    int playerID = NewGods.data.getPlayerID(p.getName());
+	    int godID = NewGods.data.getGodID(Data.playerGod.get(playerID));
+	    if (godID == -1)
+	      return; 
+	    if (p.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.getMaterial(NewGods.godItems.get(godID)), ((Integer)NewGods.itemAmountLeft
+	          .get(godID)).intValue()))) {
+	      p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() - 1);
+	      if (p.hasPermission("newgods.doublexp")) {
+	        p.sendMessage(ChatColor.valueOf(Data.godType.get(godID)) + "Sacrificed item and gained " + (((Integer)NewGods.itemPrayerPoints
+	            .get(godID)).intValue() * 2) + " faith power.");
+	        Data.playerHolyness.set(playerID, 
+	            Integer.valueOf(((Integer)Data.playerHolyness.get(playerID)).intValue() + ((Integer)NewGods.itemPrayerPoints.get(godID)).intValue() * 2));
+	        Data.playerGodHappines.set(playerID, 
+	            Integer.valueOf(((Integer)Data.playerGodHappines.get(playerID)).intValue() + ((Integer)NewGods.itemPrayerPoints.get(godID)).intValue() * 2));
+	      } else {
+	        p.sendMessage(ChatColor.valueOf(Data.godType.get(godID)) + "Sacrificed item and gained " + NewGods.itemPrayerPoints
+	            .get(godID) + " faith power.");
+	        Data.playerHolyness.set(playerID, 
+	            Integer.valueOf(((Integer)Data.playerHolyness.get(playerID)).intValue() + ((Integer)NewGods.itemPrayerPoints.get(godID)).intValue()));
+	        Data.playerGodHappines.set(playerID, 
+	            Integer.valueOf(((Integer)Data.playerGodHappines.get(playerID)).intValue() + ((Integer)NewGods.itemPrayerPoints.get(godID)).intValue()));
+	      } 
+	      Data.godPower.set(godID, Integer.valueOf(((Integer)Data.godPower.get(godID)).intValue() + ((Integer)NewGods.itemPrayerPoints.get(godID)).intValue()));
+	      NewGods.itemAmountLeft.set(godID, Integer.valueOf(((Integer)NewGods.itemAmountLeft.get(godID)).intValue() - 1));
+	      if (((Integer)NewGods.itemAmountLeft.get(godID)).intValue() <= 0) {
+	        p.closeInventory();
+	      } else {
+	        ItemStack itms = new ItemStack(Material.getMaterial(NewGods.godItems.get(godID)), ((Integer)NewGods.itemAmountLeft.get(godID)).intValue());
+	        InitInterface.menuSacrifice.setOption(3, itms, NewGods.godItems.get(godID), new String[] { "Sacrifice for " + NewGods.itemPrayerPoints
+	              .get(godID) + " faith power." });
+	        InitInterface.menuSacrifice.open(p);
+	      } 
+	    } else {
+	      p.closeInventory();
+	      p.sendMessage(ChatColor.DARK_RED + "You need to be holding the item you want to sacrifice.");
+	    } 
+	  }
+	  public static void SacrificeMob(Player p, EntityType e) {
+		    int playerID = NewGods.data.getPlayerID(p.getName());
+		    int godID = NewGods.data.getGodID(Data.playerGod.get(playerID));
+		    if (godID == -1)
+		      return; 
+		    String mob = NewGods.godMobs.get(godID);
+		    mob = mob.trim();
+		    String killedMob = e.toString();
+		    killedMob = killedMob.trim();
+		    if (killedMob.equalsIgnoreCase(mob) && (
+		      (Integer)NewGods.mobAmountLeft.get(godID)).intValue() > 0) {
+		      if (p.hasPermission("newgods.doublexp")) {
+		        p.sendMessage(ChatColor.valueOf(Data.godType.get(godID)) + "Sacrificed mob and gained " + (((Integer)NewGods.mobPrayerPoints
+		            .get(godID)).intValue() * 2) + " faith power.");
+		        Data.playerHolyness.set(playerID, 
+		            Integer.valueOf(((Integer)Data.playerHolyness.get(playerID)).intValue() + ((Integer)NewGods.mobPrayerPoints.get(godID)).intValue() * 2));
+		        Data.playerGodHappines.set(playerID, 
+		            Integer.valueOf(((Integer)Data.playerGodHappines.get(playerID)).intValue() + ((Integer)NewGods.mobPrayerPoints.get(godID)).intValue() * 2));
+		        Data.godPower.set(godID, Integer.valueOf(((Integer)Data.godPower.get(godID)).intValue() + ((Integer)NewGods.mobPrayerPoints.get(godID)).intValue() * 2));
+		      } else {
+		        p.sendMessage(ChatColor.valueOf(Data.godType.get(godID)) + "Sacrificed mob and gained " + NewGods.mobPrayerPoints
+		            .get(godID) + " faith power.");
+		        Data.playerHolyness.set(playerID, 
+		            Integer.valueOf(((Integer)Data.playerHolyness.get(playerID)).intValue() + ((Integer)NewGods.mobPrayerPoints.get(godID)).intValue()));
+		        Data.playerGodHappines.set(playerID, 
+		            Integer.valueOf(((Integer)Data.playerGodHappines.get(playerID)).intValue() + ((Integer)NewGods.mobPrayerPoints.get(godID)).intValue()));
+		        Data.godPower.set(godID, Integer.valueOf(((Integer)Data.godPower.get(godID)).intValue() + ((Integer)NewGods.mobPrayerPoints.get(godID)).intValue()));
+		      } 
+		      NewGods.mobAmountLeft.set(godID, Integer.valueOf(((Integer)NewGods.mobAmountLeft.get(godID)).intValue() - 1));
+		    } 
     	}		
 	}
 
